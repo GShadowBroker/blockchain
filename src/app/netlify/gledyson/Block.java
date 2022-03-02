@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Block {
-    private UUID id;
+    private final UUID id;
     private int nonce; // number only used once
-    private long timestamp;
+    private final long timestamp;
     private String hash;
     private String previousHash;
-    private String transaction;
+    private final String transaction;
 
-    public Block(UUID id, String previousHash, String transaction) {
-        this.id = id;
+    public Block(String previousHash, String transaction) {
+        this.id = UUID.randomUUID();
         this.previousHash = previousHash;
         this.transaction = transaction;
         this.timestamp = new Date().getTime();
@@ -24,9 +24,7 @@ public class Block {
     public void generateHash() {
         String dataToHash = id.toString() + previousHash + Long.toString(timestamp) + Integer.toString(nonce) + transaction.toString();
 
-        String hashedData = SHA256Helper.generateHash(dataToHash);
-
-        this.hash = hashedData;
+        this.hash = SHA256Helper.generateHash(dataToHash);
     }
 
     public void incrementNonce() {
